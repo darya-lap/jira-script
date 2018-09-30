@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.yourco</groupId>
+    <version>1.0</version>
+    <artifactId>jira_117691</artifactId>
+    <packaging>pom</packaging>
+
+    <name>ScriptRunner Jira Project for http://localhost:2990/jira</name>
+    <description>This is a transient project created solely for use with ScriptRunner. It is safe to delete and allow the ScriptRunner IDEA plugin recreate it</description>
+
+    <modules>
+        <module>api</module>
+        <module>scriptRoots</module>
+        <module>inline</module>
+    </modules>
+
+</project>
