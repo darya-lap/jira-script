@@ -8,26 +8,31 @@ import com.atlassian.jira.web.bean.PagerFilter
 
 finalMessage = ""
 
+def logMessage(String mes){
+    finalMessage += System.lineSeparator()
+    finalMessage += mes
+}
+
 def mainMethod() {
     String jqlQuery = ""
-//    logImportantMessage "Executing query: <pre>${jqlQuery}</pre>"
     IssueWatcherAccessor iwa = ComponentAccessor.getComponent(IssueWatcherAccessor.class)
     def user = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser()
-    def watcherManager = ComponentAccessor.getWatcherManager();
+    def watcherManager = ComponentAccessor.getWatcherManager()
     Locale en = new Locale("en")
-    def worklogManager = ComponentAccessor.getComponent(WorklogManager)
-
+    def workLogManager = ComponentAccessor.getComponent(WorklogManager)
     
     def issues = findIssues(jqlQuery)
     for (issue in issues) {
         def watchers = iwa.getWatchers(issue, en)
         if (watchers.contains(user)){
+            logMessage("Issue " + issue.getKey() + ":")
             for (watcher in watchers){
                 if (watcher != user){
-                    watcherManager.stopWatching(watcher,issue);
+                    watcherManager.stopWatching(watcher,issue)
+                    logMessage("User " + watcher.getName() + " stopped watching")
                 }
             }
-            def worklog = new WorklogImpl(worklogManager,
+            def worklog = new WorklogImpl(workLogManager,
                 issue,
                 null,
                 user.getName(),
@@ -38,7 +43,7 @@ def mainMethod() {
                 3600
             )
 
-            worklogManager.create(issue.reporter, worklog, 0L, false)
+            workLogManager.create(issue.reporter, worklog, 0L, false)
             issue.timeSpent = issue.timeSpent == null ? 1*3600 : issue.timeSpent + 1*3600
         }
     }
