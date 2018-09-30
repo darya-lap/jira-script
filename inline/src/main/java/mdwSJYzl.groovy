@@ -1,12 +1,6 @@
-import com.atlassian.jira.ComponentManager
 import com.atlassian.jira.component.ComponentAccessor
-import com.atlassian.jira.config.properties.APKeys
-import com.atlassian.jira.issue.CustomFieldManager
-import com.atlassian.jira.issue.Issue
-import com.atlassian.jira.issue.MutableIssue
 import com.atlassian.jira.issue.search.SearchProvider
 import com.atlassian.jira.issue.watchers.IssueWatcherAccessor
-import com.atlassian.jira.issue.watchers.WatcherManager
 import com.atlassian.jira.issue.worklog.WorklogImpl
 import com.atlassian.jira.issue.worklog.WorklogManager
 import com.atlassian.jira.jql.parser.JqlQueryParser
