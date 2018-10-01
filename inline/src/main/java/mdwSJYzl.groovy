@@ -9,45 +9,42 @@ import com.atlassian.jira.web.bean.PagerFilter
 finalMessage = ""
 
 def logMessage(String mes){
-    finalMessage += System.lineSeparator()
+    finalMessage += "<br>"
     finalMessage += mes
 }
 
 def mainMethod() {
-    String jqlQuery = ""
+    String jqlQuery = "watcher = currentUser()"
     IssueWatcherAccessor iwa = ComponentAccessor.getComponent(IssueWatcherAccessor.class)
     def user = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser()
     def watcherManager = ComponentAccessor.getWatcherManager()
     Locale en = new Locale("en")
     def workLogManager = ComponentAccessor.getComponent(WorklogManager)
-    
+
     def issues = findIssues(jqlQuery)
     for (issue in issues) {
         def watchers = iwa.getWatchers(issue, en)
-        if (watchers.contains(user)){
-            logMessage("Issue " + issue.getKey() + ":")
-            for (watcher in watchers){
-                if (watcher != user){
-                    watcherManager.stopWatching(watcher,issue)
-                    logMessage("User " + watcher.getName() + " stopped watching")
-                }
+        logMessage("Issue " + issue.getKey() + ":")
+        for (watcher in watchers) {
+            if (watcher != user) {
+                watcherManager.stopWatching(watcher, issue)
+                logMessage("User " + watcher.getName() + " stopped watching")
             }
-            def worklog = new WorklogImpl(workLogManager,
-                issue,
-                null,
-                user.getName(),
-                issue.summary,
-                new Date(),
-                null,
-                null,
-                3600
-            )
-
-            workLogManager.create(issue.reporter, worklog, 0L, false)
-            issue.timeSpent = issue.timeSpent == null ? 1*3600 : issue.timeSpent + 1*3600
         }
-    }
+        def workLog = new WorklogImpl(workLogManager,
+            issue,
+            null,
+            user.getName(),
+            issue.summary,
+            new Date(),
+            null,
+            null,
+            3600
+        )
 
+        workLogManager.create(issue.reporter, workLog, 0L, false)
+        issue.timeSpent = issue.timeSpent == null ? 1 * 3600 : issue.timeSpent + 1 * 3600
+    }
     return finalMessage
 }
 
